@@ -1,0 +1,272 @@
+
+## Product Hunt, the project
+
+A **stateful product discovery agent for the Nigerian market** that helps a user search, compare,
+and choose products intelligently over time by remembering preferences, past decisions, and learned tradeoffs.
+
+Not a chatbot. A system.
+
+---
+
+## Phase 0: Define the spine (1 to 2 days)
+
+Before touching code, lock the mental model.
+
+Deliverables:
+
+* One page README describing:
+
+  * What problem this solves
+  * Why stateless chat fails here
+  * What “memory” means in this system
+* Clear non goals, no checkout, no payments, no vendor onboarding, no price guarantees
+
+Key decisions to freeze:
+
+* Single user per instance
+* TinyDB for memory
+* Google ADK for orchestration
+* Explicit agent roles, no free for all prompting
+
+If you skip this phase, everything later becomes mushy.
+
+---
+
+## Phase 1: Core domain models (2 to 3 days)
+
+This is where the project starts looking serious.
+
+Implement **pure data models**, no agents yet.
+
+Things to define cleanly:
+
+* Product model, normalised attributes, category, specs, price, vendor, warranty, availability
+* Vendor model, name, platform, location, trust signals, delivery scope
+* Comparison model, criteria, weights, ranked results
+* Memory schemas, episodic, preference, heuristic, exactly like you outlined
+
+Deliverable:
+
+* Python models or Pydantic schemas
+* Sample JSON data
+* Unit tests validating schema evolution
+
+This phase screams “I think before I prompt”.
+
+---
+
+## Phase 2: Memory module implementation (TinyDB) (2 days)
+
+Now build what you already designed.
+
+Implement:
+
+* Episodic memory append
+* Preference memory upsert with confidence and evidence count
+* Heuristic memory read only during reasoning
+
+Rules:
+
+* No agent writes mid reasoning
+* All writes happen via a single memory service
+* Memory access is explicit, no hidden reads
+
+Deliverable:
+
+* MemoryService class
+* Clear read and write APIs
+* Small script showing memory evolving across sessions
+
+At this point, even without agents, the project has weight.
+
+---
+
+## Phase 3: Agent graph design with Google ADK (2 days)
+
+Before wiring logic, define the agent graph.
+
+Agents:
+
+* Session Orchestrator
+* Product Intelligence
+* Vendor Discovery
+* Ranking and Tradeoff
+
+For each agent, write:
+
+* Responsibilities
+* Inputs
+* Outputs
+* Memory access permissions
+
+This is important. It shows you understand agent boundaries.
+
+Deliverable:
+
+* Agent graph diagram
+* ADK agent definitions with stub logic
+* Mock calls between agents
+
+Still no scraping, no APIs, just structure.
+
+---
+
+## Phase 4: Product Intelligence Agent (3 days)
+
+This is the brain.
+
+Implement:
+
+* Query normalisation, “27 inch monitor” becomes structured intent
+* Spec comparison logic
+* Equivalence reasoning, same panel, same chipset, same generation
+
+This agent does not care about Nigeria yet. Just product truth.
+
+Deliverable:
+
+* Deterministic comparison outputs
+* Explainable reasoning traces
+* Unit tests with known products
+
+This phase separates you from prompt engineers.
+
+---
+
+## Phase 5: Vendor Discovery Agent (Nigeria aware) (3 to 4 days)
+
+Now embrace the mess.
+
+Start small:
+
+* One or two platforms, Jumia and Slot is enough
+* Ground search with Google Search Grounding
+
+Implement:
+
+* Vendor normalisation
+* Price extraction
+* Availability flags
+* Delivery location constraints
+
+Add:
+
+* Vendor trust score placeholder
+* Simple heuristics like “too cheap to be real”
+
+Deliverable:
+
+* Vendor comparison table per product
+* Logged vendor observations stored in episodic memory
+
+This is where the project becomes local and interesting.
+
+---
+
+## Phase 6: Ranking and Tradeoff Agent (2 days)
+
+This agent makes the output feel intelligent.
+
+Implement:
+
+* Weighted ranking using preferences and heuristics
+* Tradeoff explanations, cheaper vs warranty, trusted vendor vs slower delivery
+* Deterministic ranking, no vibes
+
+This agent should read:
+
+* Preferences
+* Heuristics
+* Current product and vendor data
+
+Deliverable:
+
+* Ranked output with explanations
+* Same input produces same output
+
+People underestimate how impressive determinism is.
+
+---
+
+## Phase 7: Session Orchestrator and lifecycle (2 days)
+
+Now tie it together.
+
+Implement:
+
+* Session creation and resume
+* Task boundaries
+* Commit memory at end of task
+* Clear separation between thinking and writing
+
+Deliverable:
+
+* User can search today, come back tomorrow, and the system remembers context
+* Logs showing memory reads and writes
+
+At this point, it is officially an agent system.
+
+---
+
+## Phase 8: Simple UI or CLI (1 to 2 days)
+
+Do not overbuild this.
+
+Options:
+
+* Minimal web UI (StreamLIT)
+* Terminal interface
+* Simple chat like flow
+
+The UI only needs to prove:
+
+* Session continuity
+* Comparison views
+* Clear recommendations
+
+Deliverable:
+
+* Screenshots or short demo video
+
+---
+
+## Phase 9: Memory refinement loop (2 days)
+
+This is where “WOW” lives.
+
+Implement:
+
+* Preference updates from outcomes
+* Confidence adjustment rules
+* Heuristic usage tracking
+
+Example:
+User repeatedly rejects vendors without warranty.
+System increases warranty weight for high ticket items.
+
+Deliverable:
+
+* Before and after memory snapshots
+* Same query produces different ranking weeks later
+
+This demonstrates learning without ML nonsense.
+
+---
+
+## Phase 10: Polish for portfolio (2 days)
+
+Now you package it.
+
+Add:
+
+* Architecture diagram
+* Agent graph explanation
+* Memory philosophy section
+* Tradeoffs and future extensions
+
+Optional:
+
+* Blog post or long README
+* “What I deliberately did not build” section
+
+This signals maturity.
