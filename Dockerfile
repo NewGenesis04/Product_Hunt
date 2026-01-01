@@ -23,7 +23,7 @@ WORKDIR /app
 
 # Copy the pre-built virtual environment and source code
 COPY --from=builder /app/.venv /app/.venv
-COPY --from=builder /app /app
+COPY --from=builder /app/ .
 
 # Ensure the virtual environment's binaries are used
 ENV PATH="/app/.venv/bin:$PATH"

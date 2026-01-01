@@ -36,4 +36,4 @@ class Product(BaseModel):
     snapshot: list[ProductSnapshot]
     market_summary: MarketSummary
     vendor_offerings: list[VendorOfferings] | None
-    timestamp: datetime
+    timestamp: datetime = Field(default_factory=datetime.now)
